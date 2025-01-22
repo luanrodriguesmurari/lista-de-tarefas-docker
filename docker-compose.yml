@@ -1,0 +1,28 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: CRUD.Api/Dockerfile
+    ports:
+      - "8080:8080" # Porta externa para acessar a API
+      - "8081:8081" # Outra porta exposta pela API
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=TaskItemDb;User Id=sa;Password=Your@#_password123;TrustServerCertificate=True;
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    ports:
+      - "1433:1433" # Porta padrão do SQL Server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your@#_password123 # Substitua por uma senha forte
+      - MSSQL_PID=Express
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:
