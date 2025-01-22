@@ -19,7 +19,9 @@ namespace CRUD.Api
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddDbContext<RepositoryContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ??
+                                     Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")));
+
 
             builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
             builder.Services.AddScoped<ITaskItemService, TaskItemService>();
